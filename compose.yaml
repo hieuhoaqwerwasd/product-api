@@ -1,0 +1,21 @@
+name: bt-p1
+services:
+  mongodb:
+    image: mongo:7
+    container_name: nammongodb-bt1
+    volumes: [mongo_data:/data/db]
+    healthcheck:
+      test: [CMD, mongosh, --quiet, --eval, "quit(db.adminCommand('ping').ok ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  product-api:
+    build: .
+    environment:
+      PORT: 3000
+      MONGODB_URI: mongodb://mongodb:27017/productdb
+    ports: ["127.0.0.1:3001:3000"]
+    depends_on:
+      mongodb: {condition: service_healthy}
+volumes:
+  mongo_data:
