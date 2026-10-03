@@ -5,3 +5,10 @@ test('accepts valid product', () => assert.equal(validateProduct({ pid: 1, pname
 test('rejects negative/fractional inventory and string price', () => {
   for (const body of [{ quantity: -1 }, { quantity: 1.5 }, { price: '10' }, { price: Infinity }, { $set: {} }, {}]) assert.ok(validateProduct(body, true));
 });
+
+test('rejects blank product name', () => {
+  assert.equal(
+    validateProduct({ pname: '   ' }, true),
+    'Invalid pname'
+  );
+});
