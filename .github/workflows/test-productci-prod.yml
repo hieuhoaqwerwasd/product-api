@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Pull tested commit and deploy
-        shell: pwsh
+        shell: powershell
         env:
           DOCKERHUB_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/product-api
           IMAGE_TAG: ${{ github.sha }}
