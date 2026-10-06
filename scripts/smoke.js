@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-const base = process.env.BASE_URL || 'http://localhost:3001';
+const base = process.env.BASE_URL || 'http://localhost:3000';
 const pid = Math.floor(Date.now() / 1000);
 async function request(path, method = 'GET', body, expected = 200) {
   const r = await fetch(base + path, { method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });

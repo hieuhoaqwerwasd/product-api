@@ -57,12 +57,13 @@ jobs:
           DOCKERHUB_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/product-api
           IMAGE_TAG: ${{ github.sha }}
           MONGO_VOLUME: bt-p1_mongo_data
+          API_PORT: '3000'
         run: |
           if (!(Test-Path .env)) { Copy-Item .env.example .env }
           docker compose -f docker-compose-prod.yaml pull
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           docker compose -f docker-compose-prod.yaml up -d --wait --wait-timeout 180
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $env:BASE_URL = 'http://localhost:3001'
+          $env:BASE_URL = 'http://localhost:3000'
           node scripts/smoke.js
           exit $LASTEXITCODE

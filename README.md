@@ -51,14 +51,14 @@ Bước chuyển trên CHỈ dùng cho container standalone; máy hiện tại �
 ```bash
 docker compose up -d --build --wait --wait-timeout 180
 docker compose ps
-curl http://localhost:3001/api/health
+curl http://localhost:3000/api/health
 npm test
 node scripts/smoke.js
 ```
 
 Nhóm Compose `product-api`, container `product-api` và `nammongodb`. Node trong container nhận DOCKER_MONGODB_URI từ .env (hostname mongodb); PORT là cổng trong container, API_PORT là cổng host. API healthcheck ở Dockerfile, Mongo healthcheck ở compose.yaml. Health API ping DB trước khi trả UP.
 
-API CRUD: POST/GET `/api/products`, GET/PUT/DELETE `/api/products/:pid`. Các trường pid, pname, price, quantity. Import `postman/product-api.postman_collection.json`, baseUrl `http://localhost:3001/api`. Tạo sản phẩm, ghi lại pid và đối chiếu:
+API CRUD: POST/GET `/api/products`, GET/PUT/DELETE `/api/products/:pid`. Các trường pid, pname, price, quantity. Import `postman/product-api.postman_collection.json`, baseUrl `http://localhost:3000/api`. Tạo sản phẩm, ghi lại pid và đối chiếu:
 
 ```bash
 docker compose exec mongodb mongosh productdb --quiet --eval 'db.products.find().toArray()'
@@ -73,7 +73,7 @@ docker compose logs --tail 50 product-api
 
 ## 13–14. Docker Hub về local Docker Engine
 
-`docker-compose-prod.yaml` dùng image Docker Hub thay cho build source. Cả hai chế độ dùng cùng nhóm/container/volume và cổng 3001: chúng THAY THẾ nhau, không chạy hai stack song song.
+`docker-compose-prod.yaml` dùng image Docker Hub thay cho build source. Cả hai chế độ dùng cùng nhóm/container/volume và cổng 3000: chúng THAY THẾ nhau, không chạy hai stack song song.
 
 Git Bash, triển khai thủ công:
 
@@ -87,7 +87,7 @@ node scripts/smoke.js
 
 Tự động: runner Windows x64 label product-api-local, Docker Desktop và Node sẵn sàng; workflow dùng Windows PowerShell. Variable ENABLE_LOCAL_CD=true, environment local-demo. Runner tạo .env từ mẫu nếu chưa có và nhận image/tag qua biến môi trường job. MONGO_VOLUME của job hiện là bt-p1_mongo_data để dùng đúng dữ liệu local hiện có; trên máy mới cần sửa tên volume này cho khớp .env trước khi bật CD.
 
-Giữ runner đang Listening for Jobs. Push main → integration → publish → deploy-local. Bản CD mới kiểm tra cổng 3001; cổng 3011 trong ảnh/lịch sử cũ không còn áp dụng cho cấu hình mới.
+Giữ runner đang Listening for Jobs. Push main → integration → publish → deploy-local. Bản CD mới kiểm tra cổng 3000; cổng 3011 trong ảnh/lịch sử cũ không còn áp dụng cho cấu hình mới.
 
 ## Bảo vệ cấu hình và dữ liệu
 
