@@ -18,6 +18,8 @@ jobs:
         with: {node-version: '22', cache: npm}
       - run: npm ci
       - run: npm test
+      - name: Prepare non-secret CI configuration
+        run: cp .env.example .env
       - run: docker compose up -d --build --wait --wait-timeout 180
       - run: npm run test:integration
       - if: always()
@@ -54,11 +56,13 @@ jobs:
         env:
           DOCKERHUB_IMAGE: ${{ vars.DOCKERHUB_USERNAME }}/product-api
           IMAGE_TAG: ${{ github.sha }}
+          MONGO_VOLUME: bt-p1_mongo_data
         run: |
+          if (!(Test-Path .env)) { Copy-Item .env.example .env }
           docker compose -f docker-compose-prod.yaml pull
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           docker compose -f docker-compose-prod.yaml up -d --wait --wait-timeout 180
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $env:BASE_URL = 'http://localhost:3011'
+          $env:BASE_URL = 'http://localhost:3001'
           node scripts/smoke.js
           exit $LASTEXITCODE

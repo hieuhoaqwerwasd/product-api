@@ -1,6 +1,8 @@
-name: bt-p1-prod
+name: product-api
 services:
   mongodb:
+    container_name: nammongodb
+    ports: ["127.0.0.1:${MONGO_PORT:?Create .env first}:27017"]
     image: mongo:7
     volumes: [mongo_data:/data/db]
     healthcheck:
@@ -9,12 +11,14 @@ services:
       timeout: 5s
       retries: 20
   product-api:
+    container_name: product-api
     image: ${DOCKERHUB_IMAGE:?Set DOCKERHUB_IMAGE}:${IMAGE_TAG:-latest}
     environment:
-      PORT: 3000
-      MONGODB_URI: mongodb://mongodb:27017/productdb
-    ports: ["127.0.0.1:3011:3000"]
+      PORT: ${PORT:?Create .env first}
+      MONGODB_URI: ${DOCKER_MONGODB_URI:?Create .env first}
+    ports: ["127.0.0.1:${API_PORT:?Create .env first}:${PORT}"]
     depends_on:
       mongodb: {condition: service_healthy}
 volumes:
   mongo_data:
+    name: ${MONGO_VOLUME:?Create .env first}
