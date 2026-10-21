@@ -1,4 +1,4 @@
-name: Integration CI and Docker Hub CD
+name: zIntegration CI and Docker Hub CD
 on:
   push:
     branches: [main]
