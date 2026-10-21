@@ -64,10 +64,21 @@ jobs:
           API_PORT: '3000'
         run: |
           if (!(Test-Path .env)) { Copy-Item .env.example .env }
-          docker compose -f docker-compose-prod.yaml pull
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          for ($attempt = 1; $attempt -le 3; $attempt++) {
+            docker compose -f docker-compose-prod.yaml pull
+            if ($LASTEXITCODE -eq 0) { break }
+            if ($attempt -eq 3) { throw 'Docker image pull failed after 3 attempts.' }
+            Write-Host "Image pull failed; retrying in 10 seconds (attempt $attempt/3)."
+            Start-Sleep -Seconds 10
+          }
           docker compose -f docker-compose-prod.yaml up -d --wait --wait-timeout 180
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           $env:BASE_URL = 'http://localhost:3000'
           node scripts/smoke.js
           exit $LASTEXITCODE
+      - name: Diagnose failed local deployment
+        if: failure()
+        shell: powershell
+        run: |
+          docker ps -a
+          docker logs --tail 50 product-api
