@@ -1,4 +1,4 @@
-name: 55Integration CI and Docker Hub CD
+name: 77Integration CI and Docker Hub CD
 on:
   push:
     branches: [main]

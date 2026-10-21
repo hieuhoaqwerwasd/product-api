@@ -6,7 +6,7 @@ export function validateProduct(body, partial = false) {
   if (partial && !Object.keys(body).length) return 'Empty update';
   if (body.pid !== undefined && (!Number.isSafeInteger(body.pid) || body.pid <= 0)) return 'Invalid pid';
   if (body.pname !== undefined && (typeof body.pname !== 'string' ||
-     !body.pname.trim() || body.pname.length > 1000)) return 'Invalid pname';
+     !body.pname.trim() || body.pname.length > 100)) return 'Invalid pname';
   if (body.price !== undefined && (typeof body.price !== 'number' ||
      !Number.isFinite(body.price) || body.price < 0)) return 'Invalid price';
   if (body.quantity !== undefined && (!Number.isSafeInteger(body.quantity) ||
