@@ -45,12 +45,16 @@ jobs:
             ${{ vars.DOCKERHUB_USERNAME }}/product-api:${{ github.sha }}
             ${{ vars.DOCKERHUB_USERNAME }}/product-api:latest
   deploy-local:
+    timeout-minutes: 15
     needs: publish
     if: vars.ENABLE_LOCAL_CD == 'true' && github.ref == 'refs/heads/main'
     runs-on: [self-hosted, Windows, X64, product-api-local]
     environment: local-demo
     steps:
       - uses: actions/checkout@v4
+      - name: Start Docker Desktop if needed
+        shell: powershell
+        run: ./scripts/ensure-docker.ps1
       - name: Pull tested commit and deploy
         shell: powershell
         env:
