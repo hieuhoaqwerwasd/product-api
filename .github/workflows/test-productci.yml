@@ -1,4 +1,4 @@
-name: Basic 44Isd
+name: Basic 55Isd
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
