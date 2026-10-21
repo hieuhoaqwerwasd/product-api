@@ -1,0 +1,13 @@
+# Use this workspace to collaborate
+workspace:
+  id: ""
+
+localResources:
+  collections:
+    - ../actions-runner/_work/product-api/product-api/postman/Bai 1 Product CRUD
+
+# Each entry here maps a local resource to one or more corresponding objects in Postman Cloud
+
+cloudResources:
+  collections:
+    ../postman/collections/Bai 1 Product CRUD Copy: 675bda0d-275f-4291-ba39-a82fb607c1c7

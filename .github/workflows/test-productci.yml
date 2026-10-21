@@ -1,4 +1,4 @@
-name: Basic asdIsd
+name: Basic zIsd
 on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
